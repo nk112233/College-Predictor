@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    font-family: "=Ubuntu";   
+    src: local("Ubuntu-Bold"),
+      url("./fonts/Ubuntu-Bold.ttf") format("truetype");
+  }
