@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import { showTable } from "./controllers/college_data.controller.js";
 import clgRouter from "./routes/clgdata.routes.js";
 import { fileURLToPath } from "url";
+import path from "path";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
