@@ -81,7 +81,6 @@ const getTable = asyncHandler(async (req , res) => {
         query.city = { $in: city };
     }
     if (name) {
-        name = name.split(",").map(n => new RegExp(n.trim(), "i"));
         query.name = { $in: name };
     }
     if(round){

@@ -226,7 +226,7 @@ const CollegePredictor = () => {
             <div className="mb-6 p-10 gap-x-10 w-full">
               <label
                 htmlFor="default-input"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="block mb-2 text-md font-medium text-gray-900 dark:text-white"
               >
                 Your {inp}
               </label>
@@ -243,7 +243,7 @@ const CollegePredictor = () => {
             <div className="w-full self-center" id="category" ref={categoryRef}>
               <label
                 htmlFor="dropdown-button"
-                className="inline-flex mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="inline-flex mb-2 text-md font-medium text-gray-900 dark:text-white"
               >
                 Your Category
               </label>
@@ -291,6 +291,7 @@ const CollegePredictor = () => {
                   />
                   <div className="block px-4 py-2 dark:text-gray-200 hover:bg-gray-800 cursor-pointer rounded-md">
                     <input
+                      disabled = {true}
                       type="checkbox"
                       checked={selectedCategory.length === 0}
                       onChange={(e) =>
@@ -313,6 +314,7 @@ const CollegePredictor = () => {
                     >
                       <input
                         type="checkbox"
+                        className = {`${!selectedCategory.includes(item) ? 'hidden' : ''}`}
                         checked={selectedCategory.includes(item)}
                         onChange={() =>
                           handleSelect(
@@ -321,7 +323,7 @@ const CollegePredictor = () => {
                             !selectedCategory.includes(item)
                           )
                         }
-                        className=""
+                        
                       />
                       &nbsp;&nbsp;{item}
                     </div>
@@ -336,7 +338,7 @@ const CollegePredictor = () => {
             <div className="w-full self-center" id="branch" ref={branchRef}>
               <label
                 htmlFor="dropdown-button"
-                className="inline-flex mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="inline-flex mb-2 text-md font-medium text-gray-900 dark:text-white"
               >
                 Branch
               </label>
@@ -385,6 +387,7 @@ const CollegePredictor = () => {
                   />
                   <div className="block px-4 py-2 dark:text-gray-200 hover:bg-gray-800 cursor-pointer rounded-md">
                     <input
+                      disabled = {true}
                       type="checkbox"
                       checked={selectedBranch.length === 0}
                       onChange={(e) =>
@@ -407,6 +410,7 @@ const CollegePredictor = () => {
                     >
                       <input
                         type="checkbox"
+                        className = {`${!selectedBranch.includes(item) ? 'hidden' : ''}`}
                         checked={selectedBranch.includes(item)}
                         onChange={() =>
                           handleSelect(
@@ -415,7 +419,6 @@ const CollegePredictor = () => {
                             !selectedBranch.includes(item)
                           )
                         }
-                        className=""
                       />
                       &nbsp;&nbsp;{item}
                     </div>
@@ -428,7 +431,7 @@ const CollegePredictor = () => {
             <div className="w-full self-center" id="type" ref={typeRef}>
               <label
                 htmlFor="dropdown-button"
-                className="inline-flex mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="inline-flex mb-2 text-md font-medium text-gray-900 dark:text-white"
               >
                 Type
               </label>
@@ -477,6 +480,7 @@ const CollegePredictor = () => {
                   <div className="block px-4 py-2 dark:text-gray-200 hover:bg-gray-800 cursor-pointer rounded-md">
                     <input
                       type="checkbox"
+                      disabled = {true}
                       checked={selectedType.length === 0}
                       onChange={(e) =>
                         handleSelect(setSelectedType, "", e.target.checked)
@@ -498,6 +502,7 @@ const CollegePredictor = () => {
                     >
                       <input
                         type="checkbox"
+                        className = {`${!selectedType.includes(item) ? 'hidden' : ''}`}
                         checked={selectedType.includes(item)}
                         onChange={() =>
                           handleSelect(
@@ -506,7 +511,7 @@ const CollegePredictor = () => {
                             !selectedType.includes(item)
                           )
                         }
-                        className=""
+                        
                       />
                       &nbsp;&nbsp;{item}
                     </div>
@@ -525,7 +530,7 @@ const CollegePredictor = () => {
           >
             <label
               htmlFor="dropdown-button"
-              className="inline-flex mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              className="inline-flex mb-2 text-md font-medium text-gray-900 dark:text-white"
             >
               City
             </label>
@@ -571,13 +576,14 @@ const CollegePredictor = () => {
                 />
                 <div className="block px-4 py-2 dark:text-gray-200 hover:bg-gray-800 cursor-pointer rounded-md">
                   <input
+                    disabled = {true}
                     type="checkbox"
                     checked={selectedCity.length === 0}
                     onChange={(e) =>
                       handleSelect(setSelectedCity, "", e.target.checked)
                     }
                   />
-                  All
+                  &nbsp;&nbsp;All
                 </div>
                 {sortedCities.map((item, index) => (
                   <div
@@ -593,6 +599,7 @@ const CollegePredictor = () => {
                   >
                     <input
                       type="checkbox"
+                      className = {`${!selectedCity.includes(item) ? 'hidden' : ''}`}
                       checked={selectedCity.includes(item)}
                       onChange={() =>
                         handleSelect(
@@ -601,7 +608,7 @@ const CollegePredictor = () => {
                           !selectedCity.includes(item)
                         )
                       }
-                      className=""
+                      
                     />
                     &nbsp;&nbsp;{item}
                   </div>
@@ -616,7 +623,7 @@ const CollegePredictor = () => {
           >
             <label
               htmlFor="dropdown-button"
-              className="inline-flex mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              className="inline-flex mb-2 text-md font-medium text-gray-900 dark:text-white"
             >
               College Name
             </label>
@@ -693,7 +700,7 @@ const CollegePredictor = () => {
         </div>
 
 
-      <div className="flex justify-center my-20">
+      <div className="flex justify-center my-4">
         <button
           type="button"
           onClick={getColleges}
