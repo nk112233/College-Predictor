@@ -106,7 +106,7 @@ const CollegePredictor = () => {
     const loadingToastId = toast.loading("Fetching  Data...");
     axios
       .post(
-        `/api/getclgs?category=${ctg}&branch=${brn}&status=${selectedType}&city=${selectedCity}&clg=${selectedClg}`,
+        `https://college-predictor-backend.vercel.app/api/getclgs?category=${ctg}&branch=${brn}&status=${selectedType}&city=${selectedCity}&clg=${selectedClg}`,
         data
       )
       .then((res) => {
