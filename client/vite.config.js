@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:8000',
+        target: 'https://mht-cet-college-predictor.onrender.com',
         secure: false, // Only needed if your backend server is using HTTPS with a self-signed certificate
         changeOrigin: true, // Add this line to handle cross-origin requests properly
         rewrite: (path) => path.replace(/^\/api/, ''), // Remove this line if not necessary
