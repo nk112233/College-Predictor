@@ -106,7 +106,7 @@ const CollegePredictor = () => {
     const loadingToastId = toast.loading("Fetching  Data...");
     axios
       .post(
-        `/api/data/getclgs?category=${ctg}&branch=${brn}&status=${selectedType}&city=${selectedCity}&clg=${selectedClg}`,
+        `/api/getclgs?category=${ctg}&branch=${brn}&status=${selectedType}&city=${selectedCity}&clg=${selectedClg}`,
         data
       )
       .then((res) => {

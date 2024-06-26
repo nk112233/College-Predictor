@@ -21,8 +21,8 @@ app.use(express.urlencoded({extended:true , limit: "16kb"}));
 app.use(express.static("public"));
 app.use(cookieParser());
 
-app.get("/" , showTable );
-app.use("/data",clgRouter);
+app.get("/api" , showTable );
+app.use("/api",clgRouter);
 
 app.use(express.static(path.join(__dirname , '../client/dist')))
 
