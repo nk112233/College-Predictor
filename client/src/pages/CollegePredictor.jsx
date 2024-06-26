@@ -66,7 +66,7 @@ const CollegePredictor = () => {
   useEffect(() => {
     const loadingToastId = toast.loading("Loading Site Please Wait...");
     axios
-      .get("/api")
+      .get("https://college-predictor-backend.vercel.app/api")
       .then((res) => {
         setCategory(res.data.data.category);
         setBranch(res.data.data.branch);
