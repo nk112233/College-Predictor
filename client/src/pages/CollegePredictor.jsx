@@ -15,6 +15,7 @@ const CollegePredictor = () => {
   const [type, setType] = useState([]);
   const [city, setCity] = useState([]);
   const [clg, setClg] = useState([]);
+  const [round, setRound] = useState(1);
 
   const [selectedCategory, setSelectedCategory] = useState([]);
   const [selectedBranch, setSelectedBranch] = useState([]);
@@ -66,7 +67,7 @@ const CollegePredictor = () => {
   useEffect(() => {
     const loadingToastId = toast.loading("Loading Site Please Wait...");
     axios
-      .get("https://college-predictor-backend.vercel.app/api")
+      .get("https://college-predictor-backend.vercel.app/api?round=1")
       .then((res) => {
         setCategory(res.data.data.category);
         setBranch(res.data.data.branch);
@@ -106,7 +107,7 @@ const CollegePredictor = () => {
     const loadingToastId = toast.loading("Fetching  Data...");
     axios
       .post(
-        `https://college-predictor-backend.vercel.app/api/getclgs?category=${ctg}&branch=${brn}&status=${selectedType}&city=${selectedCity}&clg=${selectedClg}`,
+        `https://college-predictor-backend.vercel.app/api/getclgs?category=${ctg}&branch=${brn}&status=${selectedType}&city=${selectedCity}&clg=${selectedClg}&round=${round}`,
         data
       )
       .then((res) => {
@@ -202,6 +203,10 @@ const CollegePredictor = () => {
   const handleReset = (setter) => {
     setter([]);
   };
+
+  const handleRound = (num) => {
+
+  }
 
   return (
     <>
@@ -671,6 +676,23 @@ const CollegePredictor = () => {
           </div>
         </div>
       </div>
+        <label htmlFor="round" className="inline-flex mb-2 font-medium text-gray-900 dark:text-white mx-20 my-4 text-md">Cap Rounds</label>
+        <div className="flex sm:mx-20 mx-auto justify-center sm:justify-start" id="round">
+            <div className="flex items-center me-4 ">
+                <input id="inline-radio" type="radio" value={1} name="inline-radio-group" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" defaultChecked  onClick={() => setRound(1)}/>
+                <label htmlFor="inline-radio" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300" >Round 1</label>
+            </div>
+            <div className="flex items-center me-4">
+                <input id="inline-2-radio" type="radio" value={2} name="inline-radio-group" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" onClick={() => setRound(2)}/>
+                <label htmlFor="inline-2-radio" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300" >Round 2</label>
+            </div>
+            <div className="flex items-center me-4">
+                <input id="inline-3-radio" type="radio" value={3} name="inline-radio-group" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" onClick={() => setRound(3)} />
+                <label htmlFor="inline-3-radio" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300" >Round 3</label>
+            </div>
+        </div>
+
+
       <div className="flex justify-center my-20">
         <button
           type="button"

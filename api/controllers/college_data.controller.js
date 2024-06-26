@@ -5,7 +5,8 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";
 
 const showTable = asyncHandler(async(req , res) => {
-    
+
+    let round = req.query.round;
     const categoryls = await Cap.distinct("category");
     const branchls = await Cap.distinct("branch");
     const statusls = await Cap.distinct("status");
@@ -19,15 +20,15 @@ const showTable = asyncHandler(async(req , res) => {
     if (showAll) {
         // If showAll is true, fetch all records without pagination
         tabledata = await Cap.find({
-            name: {
-                $regex: "",
+            round: {
+                $eq: round,
             }
         });
     } else {
         // Otherwise, apply pagination logic
         tabledata = await Cap.find({
-            name: {
-                $regex: "",
+            round: {
+                $eq: round,
             }
         })
         .limit(limit);
@@ -56,6 +57,7 @@ const getTable = asyncHandler(async (req , res) => {
     let branch = req.query.branch;
     let status = req.query.status;
     let city = req.query.city;
+    let round = req.query.round;
 
     let query = {};
 
@@ -82,7 +84,9 @@ const getTable = asyncHandler(async (req , res) => {
         name = name.split(",").map(n => new RegExp(n.trim(), "i"));
         query.name = { $in: name };
     }
-
+    if(round){
+        query.round = { $eq: round };
+    }
     // Add rank or percentile conditions if they exist
     if (rank) {
         query.rank = { $gte: rank };
