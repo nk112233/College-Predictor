@@ -2,8 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import { Dropdown } from "flowbite-react";
 import axios from "axios";
 import { toast } from "react-toastify";
-
+import Footer from "../components/Footer";
+import Legends from "../components/Legends";
 const CollegePredictor = () => {
+  const url = import.meta.env.VITE_BASE_URL;
   const [inp, setInp] = useState("Percentile");
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [isBranchOpen, setIsBranchOpen] = useState(false);
@@ -55,6 +57,7 @@ const CollegePredictor = () => {
     setter((prev) =>
       isSelected ? [...prev, value] : prev.filter((item) => item !== value)
     );
+    setSearchText("");
   };
 
   useEffect(() => {
@@ -67,7 +70,7 @@ const CollegePredictor = () => {
   useEffect(() => {
     const loadingToastId = toast.loading("Loading Site Please Wait...");
     axios
-      .get("https://college-predictor-backend.vercel.app/api?round=1")
+      .get(`${url}/api?round=1`)
       .then((res) => {
         setCategory(res.data.data.category);
         setBranch(res.data.data.branch);
@@ -107,7 +110,7 @@ const CollegePredictor = () => {
     const loadingToastId = toast.loading("Fetching  Data...");
     axios
       .post(
-        `https://college-predictor-backend.vercel.app/api/getclgs?category=${ctg}&branch=${brn}&status=${selectedType}&city=${selectedCity}&clg=${selectedClg}&round=${round}`,
+        `${url}/api/getclgs?category=${ctg}&branch=${brn}&status=${selectedType}&city=${selectedCity}&clg=${selectedClg}&round=${round}`,
         data
       )
       .then((res) => {
@@ -213,13 +216,17 @@ const CollegePredictor = () => {
       <div className="flex flex-col">
         <div className="flex sm:flex-row flex-col my-10 px-8 justify-between">
           <div className="flex justify-center w-full mx-auto sm:mx-10">
-            <div className="w-20 h-fit self-center mx-4">
-              <Dropdown label={inp}>
+            <div className="w-20 h-fit self-center mx-4 dark:text-white text-gray-900">
+              <Dropdown label={<span className="dark:text-white text-gray-900">{inp}</span>}>
                 <Dropdown.Item onClick={() => setInp("Percentile")}>
+                  <div className="text-md font-medium text-gray-900 dark:text-white">
                   Percentile
+                  </div>
                 </Dropdown.Item>
                 <Dropdown.Item onClick={() => setInp("Rank")}>
+                <div className="text-md font-medium text-gray-900 dark:text-white">
                   Rank
+                  </div>
                 </Dropdown.Item>
               </Dropdown>
             </div>
@@ -250,16 +257,16 @@ const CollegePredictor = () => {
               <button
                 id="dropdown-button"
                 onClick={() => setIsCategoryOpen(!isCategoryOpen)}
-                className="flex relative w-full px-4 py-2 text-sm font-medium text-gray-700 dark:bg-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-blue-500 justify-between "
+                className="flex relative w-full px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 dark:focus:ring-offset-gray-800 focus:ring-blue-500 justify-between"
               >
-                <span className="mr-2 text-white">
+                <span className="mr-2 text-gray-700 dark:text-gray-200">
                   {selectedCategory.join(", ")}
                 </span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="w-5 h-5 ml-2 -mr-1"
                   viewBox="0 0 20 20"
-                  fill="white"
+                  fill="currentColor"
                   aria-hidden="true"
                 >
                   <path
@@ -275,23 +282,23 @@ const CollegePredictor = () => {
                   className="absolute left-0 w-full rounded-md shadow-lg dark:bg-gray-700 bg-white ring-1 ring-black ring-opacity-5 p-1 space-y-1 overflow-y-scroll h-60 z-40"
                 >
                   <button
-                    className="block px-2 py-2 dark:text-gray-200 hover:bg-gray-800 cursor-pointer rounded-md border  border-slate-300 text-sm"
+                    className="block px-2 py-2 text-sm border border-slate-300 dark:text-gray-200 dark:hover:bg-gray-800 dark:border-gray-600 cursor-pointer rounded-md"
                     onClick={() => handleReset(setSelectedCategory)}
                   >
                     Reset
                   </button>
                   <input
                     id="search-input"
-                    className="block w-full px-2 py-2 bg-gray-800 dark:text-white text-gray-800 border rounded-md  border-gray-300 focus:outline-none h-8"
+                    className="block w-full px-2 py-2 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white border rounded-md border-gray-300 focus:outline-none h-8"
                     type="text"
                     placeholder="Search items"
                     autoComplete="off"
                     value={searchText}
                     onChange={handleSearchInputChange}
                   />
-                  <div className="block px-4 py-2 dark:text-gray-200 hover:bg-gray-800 cursor-pointer rounded-md">
+                  <div className="block px-4 py-2 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer rounded-md">
                     <input
-                      disabled = {true}
+                      disabled={true}
                       type="checkbox"
                       checked={selectedCategory.length === 0}
                       onChange={(e) =>
@@ -303,7 +310,7 @@ const CollegePredictor = () => {
                   {sortedCategories.map((item, index) => (
                     <div
                       key={index}
-                      className="block px-4 py-2 dark:text-gray-200 hover:bg-gray-800 cursor-pointer rounded-md"
+                      className="block px-4 py-2 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer rounded-md"
                       onClick={() =>
                         handleSelect(
                           setSelectedCategory,
@@ -314,7 +321,9 @@ const CollegePredictor = () => {
                     >
                       <input
                         type="checkbox"
-                        className = {`${!selectedCategory.includes(item) ? 'hidden' : ''}`}
+                        className={`${
+                          !selectedCategory.includes(item) ? "hidden" : ""
+                        }`}
                         checked={selectedCategory.includes(item)}
                         onChange={() =>
                           handleSelect(
@@ -323,7 +332,6 @@ const CollegePredictor = () => {
                             !selectedCategory.includes(item)
                           )
                         }
-                        
                       />
                       &nbsp;&nbsp;{item}
                     </div>
@@ -346,16 +354,16 @@ const CollegePredictor = () => {
                 id="dropdown-button"
                 onClick={() => setIsBranchOpen(!isBranchOpen)}
                 placeholder="Branch"
-                className="flex relative w-full px-4 py-2 text-sm font-medium text-gray-700 dark:bg-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-blue-500 justify-between "
+                className="flex relative w-full px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 dark:focus:ring-offset-gray-800 focus:ring-blue-500 justify-between"
               >
-                <span className="mr-2 text-white">
+                <span className="mr-2 text-gray-700 dark:text-gray-200">
                   {selectedBranch.join(", ")}
                 </span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="w-5 h-5 ml-2 -mr-1"
                   viewBox="0 0 20 20"
-                  fill="white"
+                  fill="currentColor"
                   aria-hidden="true"
                 >
                   <path
@@ -371,23 +379,23 @@ const CollegePredictor = () => {
                   className="absolute left-0 w-full rounded-md shadow-lg dark:bg-gray-700 bg-white ring-1 ring-black ring-opacity-5 p-1 space-y-1 overflow-y-scroll h-60 z-40"
                 >
                   <button
-                    className="block px-2 py-2 dark:text-gray-200 hover:bg-gray-800 cursor-pointer rounded-md border  border-slate-300 text-sm"
+                    className="block px-2 py-2 text-sm border border-slate-300 dark:text-gray-200 dark:hover:bg-gray-800 dark:border-gray-600 cursor-pointer rounded-md"
                     onClick={() => handleReset(setSelectedBranch)}
                   >
                     Reset
                   </button>
                   <input
                     id="search-input"
-                    className="block w-full px-2 py-2 bg-gray-800 dark:text-white text-gray-800 border rounded-md  border-gray-300 focus:outline-none h-8"
+                    className="block w-full px-2 py-2 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white border rounded-md border-gray-300 focus:outline-none h-8"
                     type="text"
                     placeholder="Search items"
                     autoComplete="off"
                     value={searchText}
                     onChange={handleSearchInputChange}
                   />
-                  <div className="block px-4 py-2 dark:text-gray-200 hover:bg-gray-800 cursor-pointer rounded-md">
+                  <div className="block px-4 py-2 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer rounded-md">
                     <input
-                      disabled = {true}
+                      disabled={true}
                       type="checkbox"
                       checked={selectedBranch.length === 0}
                       onChange={(e) =>
@@ -399,7 +407,7 @@ const CollegePredictor = () => {
                   {sortedBranches.map((item, index) => (
                     <div
                       key={index}
-                      className="block px-4 py-2 dark:text-gray-200 hover:bg-gray-800 cursor-pointer rounded-md"
+                      className="block px-4 py-2 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer rounded-md"
                       onClick={() =>
                         handleSelect(
                           setSelectedBranch,
@@ -410,7 +418,9 @@ const CollegePredictor = () => {
                     >
                       <input
                         type="checkbox"
-                        className = {`${!selectedBranch.includes(item) ? 'hidden' : ''}`}
+                        className={`${
+                          !selectedBranch.includes(item) ? "hidden" : ""
+                        }`}
                         checked={selectedBranch.includes(item)}
                         onChange={() =>
                           handleSelect(
@@ -438,16 +448,16 @@ const CollegePredictor = () => {
               <button
                 id="dropdown-button"
                 onClick={() => setIsTypeOpen(!isTypeOpen)}
-                className="flex relative w-full px-4 py-2 text-sm font-medium text-gray-700 dark:bg-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-blue-500 justify-between "
+                className="flex relative w-full px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 dark:focus:ring-offset-gray-800 focus:ring-blue-500 justify-between"
               >
-                <span className="mr-2 text-white">
+                <span className="mr-2 text-gray-700 dark:text-gray-200">
                   {selectedType.join(", ")}
                 </span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="w-5 h-5 ml-2 -mr-1"
                   viewBox="0 0 20 20"
-                  fill="white"
+                  fill="currentColor"
                   aria-hidden="true"
                 >
                   <path
@@ -463,24 +473,24 @@ const CollegePredictor = () => {
                   className="absolute left-0 w-full rounded-md shadow-lg dark:bg-gray-700 bg-white ring-1 ring-black ring-opacity-5 p-1 space-y-1 overflow-y-scroll h-60 z-40"
                 >
                   <button
-                    className="block px-2 py-2 dark:text-gray-200 hover:bg-gray-800 cursor-pointer rounded-md border  border-slate-300 text-sm"
+                    className="block px-2 py-2 text-sm border border-slate-300 dark:text-gray-200 dark:hover:bg-gray-800 dark:border-gray-600 cursor-pointer rounded-md"
                     onClick={() => handleReset(setSelectedType)}
                   >
                     Reset
                   </button>
                   <input
                     id="search-input"
-                    className="block w-full px-2 py-2 bg-gray-800 dark:text-white text-gray-800 border rounded-md  border-gray-300 focus:outline-none h-8"
+                    className="block w-full px-2 py-2 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white border rounded-md border-gray-300 focus:outline-none h-8"
                     type="text"
                     placeholder="Search items"
                     autoComplete="off"
                     value={searchText}
                     onChange={handleSearchInputChange}
                   />
-                  <div className="block px-4 py-2 dark:text-gray-200 hover:bg-gray-800 cursor-pointer rounded-md">
+                  <div className="block px-4 py-2 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer rounded-md">
                     <input
+                      disabled={true}
                       type="checkbox"
-                      disabled = {true}
                       checked={selectedType.length === 0}
                       onChange={(e) =>
                         handleSelect(setSelectedType, "", e.target.checked)
@@ -491,7 +501,7 @@ const CollegePredictor = () => {
                   {sortedTypes.map((item, index) => (
                     <div
                       key={index}
-                      className="block px-4 py-2 dark:text-gray-200 hover:bg-gray-800 cursor-pointer rounded-md"
+                      className="block px-4 py-2 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer rounded-md"
                       onClick={() =>
                         handleSelect(
                           setSelectedType,
@@ -502,7 +512,9 @@ const CollegePredictor = () => {
                     >
                       <input
                         type="checkbox"
-                        className = {`${!selectedType.includes(item) ? 'hidden' : ''}`}
+                        className={`${
+                          !selectedType.includes(item) ? "hidden" : ""
+                        }`}
                         checked={selectedType.includes(item)}
                         onChange={() =>
                           handleSelect(
@@ -511,7 +523,6 @@ const CollegePredictor = () => {
                             !selectedType.includes(item)
                           )
                         }
-                        
                       />
                       &nbsp;&nbsp;{item}
                     </div>
@@ -537,14 +548,16 @@ const CollegePredictor = () => {
             <button
               id="dropdown-button"
               onClick={() => setIsCityOpen(!isCityOpen)}
-              className="flex relative w-full px-4 py-2 text-sm font-medium text-gray-700 dark:bg-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-blue-500 justify-between "
+              className="flex relative w-full px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 dark:focus:ring-offset-gray-800 focus:ring-blue-500 justify-between"
             >
-              <span className="mr-2 text-white">{selectedCity.join(", ")}</span>
+              <span className="mr-2 text-gray-700 dark:text-gray-200">
+                {selectedCity.join(", ")}
+              </span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="w-5 h-5 ml-2 -mr-1"
                 viewBox="0 0 20 20"
-                fill="white"
+                fill="currentColor"
                 aria-hidden="true"
               >
                 <path
@@ -560,23 +573,23 @@ const CollegePredictor = () => {
                 className="absolute left-0 w-full rounded-md shadow-lg dark:bg-gray-700 bg-white ring-1 ring-black ring-opacity-5 p-1 space-y-1 overflow-y-scroll h-60 z-40"
               >
                 <button
-                  className="block px-2 py-2 dark:text-gray-200 hover:bg-gray-800 cursor-pointer rounded-md border  border-slate-300 text-sm"
+                  className="block px-2 py-2 text-sm border border-slate-300 dark:text-gray-200 dark:hover:bg-gray-800 dark:border-gray-600 cursor-pointer rounded-md"
                   onClick={() => handleReset(setSelectedCity)}
                 >
                   Reset
                 </button>
                 <input
                   id="search-input"
-                  className="block w-full px-2 py-2 bg-gray-800 dark:text-white text-gray-800 border rounded-md  border-gray-300 focus:outline-none h-8"
+                  className="block w-full px-2 py-2 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white border rounded-md border-gray-300 focus:outline-none h-8"
                   type="text"
                   placeholder="Search items"
                   autoComplete="off"
                   value={searchText}
                   onChange={handleSearchInputChange}
                 />
-                <div className="block px-4 py-2 dark:text-gray-200 hover:bg-gray-800 cursor-pointer rounded-md">
+                <div className="block px-4 py-2 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer rounded-md">
                   <input
-                    disabled = {true}
+                    disabled={true}
                     type="checkbox"
                     checked={selectedCity.length === 0}
                     onChange={(e) =>
@@ -588,27 +601,20 @@ const CollegePredictor = () => {
                 {sortedCities.map((item, index) => (
                   <div
                     key={index}
-                    className="block px-4 py-2 dark:text-gray-200 hover:bg-gray-800 cursor-pointer rounded-md"
+                    className="block px-4 py-2 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer rounded-md"
                     onClick={() =>
-                      handleSelect(
-                        setSelectedCity,
-                        item,
-                        !selectedCity.includes(item)
-                      )
+                      handleSelect(setSelectedCity, item, !selectedCity.includes(item))
                     }
                   >
                     <input
                       type="checkbox"
-                      className = {`${!selectedCity.includes(item) ? 'hidden' : ''}`}
+                      className={`${
+                        !selectedCity.includes(item) ? "hidden" : ""
+                      }`}
                       checked={selectedCity.includes(item)}
                       onChange={() =>
-                        handleSelect(
-                          setSelectedCity,
-                          item,
-                          !selectedCity.includes(item)
-                        )
+                        handleSelect(setSelectedCity, item, !selectedCity.includes(item))
                       }
-                      
                     />
                     &nbsp;&nbsp;{item}
                   </div>
@@ -630,14 +636,16 @@ const CollegePredictor = () => {
             <button
               id="dropdown-button"
               onClick={() => setIsClgOpen(!isClgOpen)}
-              className="flex relative w-full px-4 py-2 text-sm font-medium text-gray-700 dark:bg-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-blue-500 justify-between "
+              className="flex relative w-full px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 dark:focus:ring-offset-gray-800 focus:ring-blue-500 justify-between"
             >
-              <span className="mr-2 text-white">{selectedClg}</span>
+              <span className="mr-2 text-gray-700 dark:text-gray-200">
+                {selectedClg}
+              </span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="w-5 h-5 ml-2 -mr-1"
                 viewBox="0 0 20 20"
-                fill="white"
+                fill="currentColor"
                 aria-hidden="true"
               >
                 <path
@@ -654,7 +662,7 @@ const CollegePredictor = () => {
               >
                 <input
                   id="search-input"
-                  className="block w-full px-4 py-2 bg-gray-800 dark:text-white text-gray-800 border rounded-md  border-gray-300 focus:outline-none"
+                  className="block w-full px-4 py-2 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white border rounded-md border-gray-300 focus:outline-none"
                   type="text"
                   placeholder="Search items"
                   autoComplete="off"
@@ -664,16 +672,15 @@ const CollegePredictor = () => {
                 <a
                   href="#"
                   onClick={() => handleClgSelect("")}
-                  className="block px-4 py-2 dark:text-gray-200 hover:bg-gray-800 cursor-pointer rounded-md"
+                  className="block px-4 py-2 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer rounded-md"
                 >
                   No choice
                 </a>
                 {filteredClg.map((item, index) => (
                   <a
                     key={index}
-                    href="#"
                     onClick={() => handleClgSelect(item)}
-                    className="block px-4 py-2 dark:text-gray-200 hover:bg-gray-800 cursor-pointer rounded-md"
+                    className="block px-4 py-2 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer rounded-md"
                   >
                     &nbsp;&nbsp;{item}
                   </a>
@@ -683,23 +690,69 @@ const CollegePredictor = () => {
           </div>
         </div>
       </div>
-        <label htmlFor="round" className="inline-flex mb-2 font-medium text-gray-900 dark:text-white mx-20 my-4 text-md">Cap Rounds</label>
-        <div className="flex sm:mx-20 mx-auto justify-center sm:justify-start" id="round">
-            <div className="flex items-center me-4 ">
-                <input id="inline-radio" type="radio" value={1} name="inline-radio-group" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" defaultChecked  onClick={() => setRound(1)}/>
-                <label htmlFor="inline-radio" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300" >Round 1</label>
-            </div>
-            <div className="flex items-center me-4">
-                <input id="inline-2-radio" type="radio" value={2} name="inline-radio-group" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" onClick={() => setRound(2)}/>
-                <label htmlFor="inline-2-radio" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300" >Round 2</label>
-            </div>
-            <div className="flex items-center me-4">
-                <input id="inline-3-radio" type="radio" value={3} name="inline-radio-group" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" onClick={() => setRound(3)} />
-                <label htmlFor="inline-3-radio" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300" >Round 3</label>
-            </div>
+      <label
+        htmlFor="round"
+        className="inline-flex mb-2 font-medium text-gray-900 dark:text-white mx-20 my-4 text-md"
+      >
+        Cap Rounds
+      </label>
+      <div
+        className="flex sm:mx-20 mx-auto justify-center sm:justify-start"
+        id="round"
+      >
+        <div className="flex items-center me-4">
+          <input
+            id="inline-radio"
+            type="radio"
+            value={1}
+            name="inline-radio-group"
+            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+            defaultChecked
+            onClick={() => setRound(1)}
+          />
+          <label
+            htmlFor="inline-radio"
+            className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+          >
+            Round 1
+          </label>
         </div>
-
-
+        <div className="flex items-center me-4">
+          <input
+            id="inline-2-radio"
+            type="radio"
+            value={2}
+            name="inline-radio-group"
+            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+            onClick={() => setRound(2)}
+          />
+          <label
+            htmlFor="inline-2-radio"
+            className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+          >
+            Round 2
+          </label>
+        </div>
+        <div className="flex items-center me-4">
+          <input
+            id="inline-3-radio"
+            type="radio"
+            value={3}
+            name="inline-radio-group"
+            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+            onClick={() => setRound(3)}
+          />
+          <label
+            htmlFor="inline-3-radio"
+            className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+          >
+            Round 3
+          </label>
+        </div>
+      </div>
+      <div className="flex sm:mx-20 mx-auto justify-center sm:justify-start my-4">
+        <Legends/>
+        </div> 
       <div className="flex justify-center my-4">
         <button
           type="button"
@@ -711,12 +764,13 @@ const CollegePredictor = () => {
         </button>
       </div>
       <div className="p-6 w-full font-ubuntu font-bold ">
+        <p className="font-bold dark:text-purple-300 py-2 text-purple-800 text-sm md:text-lg">The Data is Taken From  State Common Entrance Test Cell, Government of Maharashtra, India.</p>
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
           <table
             className="w-full text-sm text-left rtl:text-right text-gray-200 dark:text-gray-200"
             id="clg-table"
           >
-            <thead className="text-md text-gray-200 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <thead className="text-md text-gray-700  uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                 <th scope="col" className="px-6 py-3">
                   College Name
@@ -743,7 +797,10 @@ const CollegePredictor = () => {
             </thead>
             <tbody>
               {table.map((item, index) => (
-                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <tr
+                  key={index}
+                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                >
                   <th
                     scope="row"
                     className="px-6 py-4 font-3xl text-gray-900 whitespace-nowrap dark:text-white"
@@ -751,10 +808,8 @@ const CollegePredictor = () => {
                     {item.name}
                   </th>
                   <td className="px-6 py-4 text-yellow-400">{item.branch}</td>
-                  <td className="px-6 py-4 text-yellow-100">{item.category}</td>
-                  <td className="px-6 py-4 text-orange-400">
-                    {item.percentile}
-                  </td>
+                  <td className="px-6 py-4 dark:text-yellow-100 text-red-800 ">{item.category}</td>
+                  <td className="px-6 py-4 text-orange-400">{item.percentile}</td>
                   <td className="px-6 py-4 text-cyan-400">{item.rank}</td>
                   <td className="px-6 py-4 text-purple-400">{item.city}</td>
                   <td className="px-6 py-4 text-green-400">{item.status}</td>
@@ -764,8 +819,10 @@ const CollegePredictor = () => {
           </table>
         </div>
       </div>
+      <Footer />
     </>
   );
+  
 };
 
 export default CollegePredictor;

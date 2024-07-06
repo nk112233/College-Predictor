@@ -6,9 +6,9 @@ const Navbar = ({ theme, handleTheme }) => {
     <>
     <nav className=" top-0 left-0 font-ubuntu font-extrabold text-4xl py-4 px-4">
         <div className='mx-auto flex flex-wrap items-center justify-between'>
-        <h1 className='text-center my-auto w-fit cursor-pointer' onClick={() => window.location.href = "/"} >MHT-CET College Predictor - Engineering</h1>
+        <h1 className='text-center my-auto w-fit cursor-pointer text-sm sm:text-4xl' onClick={() => window.location.href = "/"} >MHT-CET College Predictor - Engineering</h1>
         <div className='my-auto text-left '>
-        <button disabled = {true} onClick={handleTheme}
+        <button disabled = {false} onClick={handleTheme}
         class="h-8 w-8 rounded-lg  hover:bg-gray-100 dark:hover:bg-gray-500">
         <svg class="fill-yellow-500 hidden dark:block" fill="currentColor" viewBox="0 0 20 20">
             <path
