@@ -17,7 +17,7 @@ const CollegePredictor = () => {
   const [type, setType] = useState([]);
   const [city, setCity] = useState([]);
   const [clg, setClg] = useState([]);
-  const [round, setRound] = useState(1);
+  const [round, setRound] = useState(4);
 
   const [selectedCategory, setSelectedCategory] = useState([]);
   const [selectedBranch, setSelectedBranch] = useState([]);
