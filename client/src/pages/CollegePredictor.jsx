@@ -36,28 +36,48 @@ const CollegePredictor = () => {
   const clgRef = useRef(null);
 
   const handleClickOutside = (event) => {
-    if (categoryRef.current && !categoryRef.current.contains(event.target)) {
+    let shouldClearSearchText = false;
+  
+    // Check if click was outside of each dropdown
+    console.log( "w ", isCategoryOpen);
+    if (categoryRef.current && !categoryRef.current.contains(event.target) && isCategoryOpen) {
       setIsCategoryOpen(false);
+      shouldClearSearchText = true;
+      console.log("Category clicked outside");
     }
-    if (branchRef.current && !branchRef.current.contains(event.target)) {
+    if (branchRef.current && !branchRef.current.contains(event.target) && isBranchOpen) {
       setIsBranchOpen(false);
+      shouldClearSearchText = true;
+      console.log("Branch clicked outside");
     }
-    if (typeRef.current && !typeRef.current.contains(event.target)) {
+    if (typeRef.current && !typeRef.current.contains(event.target) && isTypeOpen) {
       setIsTypeOpen(false);
+      shouldClearSearchText = true;
+      console.log("Type clicked outside");
     }
-    if (cityRef.current && !cityRef.current.contains(event.target)) {
+    if (cityRef.current && !cityRef.current.contains(event.target) && isCityOpen) {
       setIsCityOpen(false);
+      shouldClearSearchText = true;
+      console.log("City clicked outside");
     }
-    if (clgRef.current && !clgRef.current.contains(event.target)) {
+    if (clgRef.current && !clgRef.current.contains(event.target) && isClgOpen) {
       setIsClgOpen(false);
+      shouldClearSearchText = true;
+      console.log("Clg clicked outside");
+    }
+  
+    // Clear search text if any dropdown was clicked outside
+    if (shouldClearSearchText) {
+      setSearchText("");
+      console.log("Cleared search text");
     }
   };
-
+  
   const handleSelect = (setter, value, isSelected) => {
     setter((prev) =>
       isSelected ? [...prev, value] : prev.filter((item) => item !== value)
     );
-    setSearchText("");
+    
   };
 
   useEffect(() => {
@@ -65,7 +85,7 @@ const CollegePredictor = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [isCategoryOpen , isBranchOpen , isCityOpen , isTypeOpen , isClgOpen]);
 
   useEffect(() => {
     const loadingToastId = toast.loading("Loading Site Please Wait...");
@@ -87,7 +107,6 @@ const CollegePredictor = () => {
   }, []);
 
   const dis = false;
-
   const getColleges = (e) => {
     e.preventDefault();
 
@@ -99,8 +118,16 @@ const CollegePredictor = () => {
     let data;
     console.log("rk", rank);
     if (inp === "Percentile") {
+      if(rank<0 || rank>100){
+        toast.error("Invalid Percentile!");
+        return;
+      }
       data = { percentile: rank };
     } else {
+      if(rank<0){
+        toast.error("Invalid Rank!");
+        return;
+      }
       data = { rank: rank };
     }
     const ctg = selectedCategory.join(",");
@@ -133,29 +160,30 @@ const CollegePredictor = () => {
   const handleCategorySelect = (item) => {
     setSelectedCategory(item);
     setIsCategoryOpen(false);
-    setSearchText(""); // Reset search text
+    
   };
 
   const handleBranchSelect = (item) => {
     setSelectedBranch(item);
     setIsBranchOpen(false);
-    setSearchText(""); // Reset search text
+
   };
 
   const handleTypeSelect = (item) => {
     setSelectedType(item);
     setIsTypeOpen(false);
-    setSearchText(""); // Reset search text
+
   };
   const handleCitySelect = (item) => {
     setSelectedCity(item);
     setIsCityOpen(false);
-    setSearchText(""); // Reset search text
+    
   };
   const handleClgSelect = (item) => {
     setSelectedClg(item);
     setIsClgOpen(false);
     setSearchText(""); // Reset search text
+    
   };
 
   const handleSearchInputChange = (event) => {
@@ -163,6 +191,12 @@ const CollegePredictor = () => {
   };
   const handleRankInputChange = (event) => {
     setRank(event.target.value);
+    const inputValue = event.target.value;
+
+    // If input exceeds 8 characters, show an error message
+    if (inputValue.length > 7) {
+      toast.error("Character Limit Exceeded!");
+    }
   };
 
   const filteredCategories = category.filter((item) =>
@@ -242,6 +276,7 @@ const CollegePredictor = () => {
                 id="default-input"
                 value={rank}
                 onChange={handleRankInputChange}
+                maxlength="8"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               />
             </div>
@@ -707,7 +742,6 @@ const CollegePredictor = () => {
             value={1}
             name="inline-radio-group"
             className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-            defaultChecked
             onClick={() => setRound(1)}
           />
           <label
@@ -756,6 +790,7 @@ const CollegePredictor = () => {
             value={4}
             name="inline-radio-group"
             className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+            defaultChecked
             onClick={() => setRound(4)}
           />
           <label
